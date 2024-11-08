@@ -1,0 +1,115 @@
+openapi: 3.0.0
+info:
+  title: Image and Video API
+  version: 1.0.0
+  description: API for uploading and retrieving images and videos
+
+paths:
+  /upload-image:
+    post:
+      summary: Upload an image
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Image uploaded successfully
+        '500':
+          description: Failed to upload image
+
+  /images:
+    get:
+      summary: Get a list of images
+      responses:
+        '200':
+          description: A list of image IDs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  images:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+
+  /images/{id}:
+    get:
+      summary: Get an image by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The image data
+          content:
+            image/jpeg: {}
+        '404':
+          description: Image not found
+
+  
+  /upload-video:
+    post:
+      summary: Upload a video
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                video:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Video uploaded successfully
+        '500':
+          description: Failed to upload video
+
+  /videos:
+    get:
+      summary: Get a list of videos
+      responses:
+        '200':
+          description: A list of video filenames
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  videos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        filename:
+                          type: string
+
+  /videos/{filename}:
+    get:
+      summary: Get a video by filename
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The video data
+          content:
+            video/mp4: {}
+        '404':
+          description: Video not found
