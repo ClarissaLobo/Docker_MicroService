@@ -1,0 +1,26 @@
+{
+  "name": "media-viewer-app",
+  "version": "1.0.0",
+  "description": "A Node.js application for managing images and videos with MySQL and MongoDB",
+  "main": "imageserver.js", 
+  "scripts": {
+    "start": "node imageserver.js",
+    "dev": "nodemon imageserver.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^2.3.3",
+    "pg": "^8.7.1",
+    "mongoose": "^7.0.0",
+    "gridfs-stream": "^1.1.1",
+    "swagger-ui-express": "^4.5.0",
+    "dotenv": "^16.0.3",
+    "js-yaml": "^4.1.0"  
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"  
+  },
+  "author": "Your Name",
+  "license": "MIT"
+}

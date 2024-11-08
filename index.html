@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            background-color: #ddd;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .tab:hover {
+            background-color: #ccc;
+        }
+        .tab.active {
+            background-color: #333;
+            color: white;
+        }
+        .content {
+            display: none;
+            margin: 20px;
+        }
+        .content.active {
+            display: block;
+        }
+        .media-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .media-item {
+            width: 300px;
+            text-align: center;
+        }
+        img, video {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+        video {
+            max-height: 250px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Media Viewer</h1>
+</header>
+
+<div class="tabs">
+    <div class="tab active" id="images-tab">Images</div>
+    <div class="tab" id="videos-tab">Videos</div>
+</div>
+
+<div id="images-content" class="content active">
+    <div class="media-container" id="image-container"></div>
+</div>
+
+<div id="videos-content" class="content">
+    <div class="media-container" id="video-container"></div>
+</div>
+
+<script>
+    const imagesTab = document.getElementById('images-tab');
+    const videosTab = document.getElementById('videos-tab');
+    const imagesContent = document.getElementById('images-content');
+    const videosContent = document.getElementById('videos-content');
+
+
+    imagesTab.addEventListener('click', () => {
+        imagesTab.classList.add('active');
+        videosTab.classList.remove('active');
+        imagesContent.classList.add('active');
+        videosContent.classList.remove('active');
+
+        loadImages();  // Load images only if not already loaded
+
+    });
+
+    videosTab.addEventListener('click', () => {
+        videosTab.classList.add('active');
+        imagesTab.classList.remove('active');
+        videosContent.classList.add('active');
+        imagesContent.classList.remove('active');
+        loadVideos();
+    });
+
+    async function loadImages() {
+        const response = await fetch('/images');
+        const data = await response.json();
+        const imageContainer = document.getElementById('image-container');
+        imageContainer.innerHTML = '';
+        data.images.forEach(async image => {
+            const img = document.createElement('img');
+            const imageRes = await fetch(`/images/${image.id}`);
+            const blob = await imageRes.blob();
+            img.src = URL.createObjectURL(blob);
+            imageContainer.appendChild(img);
+        });
+    }
+
+    async function loadVideos() {
+        const response = await fetch('/videos');
+        const data = await response.json();
+        const videoContainer = document.getElementById('video-container');
+        videoContainer.innerHTML = '';
+        data.videos.forEach(async video => {
+            const videoElement = document.createElement('video');
+            videoElement.controls = true;
+            const videoRes = await fetch(`/videos/${video.id}`);
+            const blob = await videoRes.blob();
+            videoElement.src = URL.createObjectURL(blob);
+            videoContainer.appendChild(videoElement);
+        });
+    }
+
+    // Load images initially
+    // loadImages();
+</script>
+
+</body>
+</html>
